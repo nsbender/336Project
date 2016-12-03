@@ -11,11 +11,11 @@
 
 
 
-DB structure
+#DB structure
 
+##Games collection:
 
-Collection: games
-'''
+```
 [  
    {  
       uniqueID:“xyz”,
@@ -50,4 +50,4 @@ Collection: games
       ]
    }
 ]
-'''
+```
