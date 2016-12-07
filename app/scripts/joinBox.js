@@ -1,5 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
+import { browserHistory } from 'react-router';
 
 module.exports = React.createClass({
   getInitialState: function() {
@@ -14,9 +15,9 @@ module.exports = React.createClass({
     if (!text) {
       return;
     }
-    this.props.onSessionSubmit({text: text});
     this.setState({ text: ''});
     //join game with the id contained in 'text'
+    browserHistory.push('/' + text);
   },
   handleCreate: function(e) {
     e.preventDefault();
