@@ -8,8 +8,8 @@ import '../css/base.css';
 
 ReactDOM.render((
     <Router history={browserHistory}>
-        <Route path="/" component={JoinBox}/>
-        <Route path="/:id" component={GameBox} />
+        <Route path="/" component={joinBox}/>
+        <Route path="/:id" component={gameBox} />
     </Router>
 ), document.getElementById('content')
 );
