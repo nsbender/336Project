@@ -1,10 +1,24 @@
 import React from 'react';
 import $ from 'jquery';
 import { browserHistory } from 'react-router';
+import { API_URL, POLL_INTERVAL } from './global';
 
 module.exports = React.createClass({
   getInitialState: function() {
     return {data: []};
+  },
+  loadGamesFromServer: function() {
+    $.ajax({
+      url: API_URL,
+      dataType: 'json',
+      cache: false,
+    })
+    .done(function(result){
+      this.setState({data: result});
+    }.bind(this))
+    .fail(function(xhr, status, errorThrown) {
+      console.error(this.props.url, status, errorThrown.toString());
+    }.bind(this));
   },
   handleTextChange: function(e) {
     this.setState({text: e.target.value});
@@ -17,6 +31,8 @@ module.exports = React.createClass({
     }
     this.setState({ text: ''});
     //join game with the id contained in 'text'
+    //but TODO: first we should make sure that the ID is contained in the 'data' we retrieved
+    //earlier in loadGamesFromServer();
     browserHistory.push('/' + text);
   },
   handleCreate: function(e) {
