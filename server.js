@@ -14,6 +14,7 @@ var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
+var favicon = require('serve-favicon');
 var MongoClient = require('mongodb').MongoClient
 
 var db;
@@ -24,6 +25,7 @@ app.set('port', (process.env.PORT || 3000));
 app.use('/', express.static(APP_PATH));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(favicon(path.join(__dirname,'dist','images','favicon.ico')));
 
 app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
