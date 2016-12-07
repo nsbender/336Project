@@ -25,7 +25,7 @@ app.set('port', (process.env.PORT || 3000));
 app.use('/', express.static(APP_PATH));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
-app.use(favicon(path.join(__dirname,'dist','images','favicon.ico')));
+app.use(favicon(path.join(__dirname,'app','images','favicon.ico')));
 
 app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', '*');
