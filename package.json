@@ -26,6 +26,7 @@
     "remarkable": "^1.7.1",
     "serve-favicon": "^2.3.2",
     "style-loader": "^0.13.1",
+    "file-loader": "^0.9.0",
     "webpack": "^1.13.3"
   },
   "devDependencies": {
@@ -52,10 +53,7 @@
     "rock'n'roll"
   ],
   "author": "Nate Bender, Christian Hazlett",
-  "bugs": {
-    "url": "https://github.com/reactjs/react-tutorial/issues"
-  },
-  "homepage": "https://github.com/reactjs/react-tutorial",
+
   "engines": {
     "node": "0.12.x"
   }

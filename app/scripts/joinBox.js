@@ -3,6 +3,8 @@ import $ from 'jquery';
 import { browserHistory } from 'react-router';
 import { API_URL, POLL_INTERVAL } from './global';
 
+import feltImage from '../images/felt.jpg'
+
 module.exports = React.createClass({
   getInitialState: function() {
     return {data: []};
@@ -42,17 +44,21 @@ module.exports = React.createClass({
   render: function() {
     return (
       <div>
-      <h1>Welcome To PokerStars.net</h1>
-      <h2>Create a new game, or enter the id of an already existing game in the field below</h2>
-      <form onSubmit={this.handleCreate}>
-      <input className="ui-button ui-widget ui-corner-all" type="submit" value="Create Game" />
-      </form>
-      <form onSubmit={this.handleJoin}>
-      <input className="ui-widget ui-corner-all" type="text" placeholder="Game Name"
-      value={this.state.sessionID} onChange={this.handleTextChange}
-      />
-      <input className="ui-button ui-widget ui-corner-all" type="submit" value="Join Game" />
-      </form>
+        <h1 type="title">CalvinPoker.club</h1>
+        <h2>Create a new game, or enter the id of an already existing game in the field below</h2>
+
+        <div style={{paddingTop:'128px'}}>
+        <form onSubmit={this.handleCreate} style={{display: 'flex', justifyContent: 'center'}}>
+          <input className="ui-button ui-widget ui-corner-all" type="submit" value="Create Game" />
+        </form>
+        <h2 style={{display: 'flex', justifyContent: 'center'}}>Or</h2>
+        <form onSubmit={this.handleJoin} style={{display: 'flex', justifyContent: 'center'}}>
+          <input className="ui-widget ui-corner-all" type="text" placeholder="Game Name"
+          value={this.state.sessionID} onChange={this.handleTextChange}
+          />
+          <input className="ui-button ui-widget ui-corner-all" type="submit" value="Join Game" />
+        </form>
+        </div>
       </div>
     );
   }
