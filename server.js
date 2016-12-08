@@ -33,56 +33,41 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get('/api/comments', function(req, res) {
-    db.collection("comments").find({}).toArray(function(err, docs) {
+app.get('/api/games', function(req, res) {
+    db.collection("games").find({}).toArray(function(err, docs) {
         if (err) throw err;
         res.json(docs);
     });
 });
 
-app.post('/api/comments', function(req, res) {
-    var newComment = {
-        id: Date.now(),
-        author: req.body.author,
-        text: req.body.text,
+app.post('/api/games', function(req, res) {
+    var newGame = {
+        id: Math.random().toString(36).substr(2, 5),
+        //Players? Dunno what else games will have.
+        //TODO : Define our data model
     };
-    db.collection("comments").insertOne(newComment, function(err, result) {
+    db.collection("games").insertOne(newGame, function(err, result) {
         if (err) throw err;
-        db.collection("comments").find({}).toArray(function(err, docs) {
+        db.collection("games").find({}).toArray(function(err, docs) {
             if (err) throw err;
             res.json(docs);
         });
     });
 });
 
-app.get('/api/comments/:id', function(req, res) {
-    db.collection("comments").find({"id": Number(req.params.id)}).toArray(function(err, docs) {
+app.get('/api/games/:id', function(req, res) {
+    db.collection("games").find({"id": Number(req.params.id)}).toArray(function(err, docs) {
         if (err) throw err;
         res.json(docs);
     });
 });
 
-app.put('/api/comments/:id', function(req, res) {
-    var updateId = Number(req.params.id);
-    var update = req.body;
-    db.collection('comments').updateOne(
-        { id: updateId },
-        { $set: update },
-        function(err, result) {
-            if (err) throw err;
-            db.collection("comments").find({}).toArray(function(err, docs) {
-                if (err) throw err;
-                res.json(docs);
-            });
-        });
-});
-
-app.delete('/api/comments/:id', function(req, res) {
-    db.collection("comments").deleteOne(
+app.delete('/api/games/:id', function(req, res) {
+    db.collection("games").deleteOne(
         {'id': Number(req.params.id)},
         function(err, result) {
             if (err) throw err;
-            db.collection("comments").find({}).toArray(function(err, docs) {
+            db.collection("games").find({}).toArray(function(err, docs) {
                 if (err) throw err;
                 res.json(docs);
             });
