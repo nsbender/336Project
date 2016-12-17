@@ -14,7 +14,7 @@
 #DB structure
 
 ##Games collection:
-
+```
 [
   {
     "uid" : "a1b2c3",
@@ -23,7 +23,6 @@
     "started" : "true",
     "minBet" : 5,
     "pot" : 100,
-
     "discardDeck" :
     [
       {"card":"2H"},
@@ -46,7 +45,6 @@
       {"card":"8D","faceUp":"false"},
       {"card":"6C","faceUp":"false"}
     ],
-
     "players" :
     [
       { "uid":"1q2w3e", "name":"Jimmy", "cards":[{"card":"2C"},{"card":"3C"}], "chips":500, "status":"check" },
@@ -54,6 +52,5 @@
       { "uid":"4r5t6y", "name":"Christiaan", "cards" : [{"card":"QH"},{"card":"AD"}], "chips":751, "status":"check" }
     ]
   }
-
-  ...
 ]
+```
