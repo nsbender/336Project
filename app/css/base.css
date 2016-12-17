@@ -1,11 +1,21 @@
+html {
+  height: 90%;
+}
+
 body {
+  min-height: 100%;
   background-image: url(../images/felt.jpg);
   background-repeat: repeat;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 15px;
   line-height: 1.7;
-  margin: 0;
-  padding: 30px;
+  margin: 30px;
+  padding: 0;
+}
+
+#content {
+  flex: 1;
+  flex-direction: column;
 }
 
 a {
@@ -92,4 +102,11 @@ input[type=text] {
   text-transform: uppercase;
   display: inline-block;
   font-size: 30px;
+}
+
+.gameBox {
+
+}
+
+.otherPlayers {
 }
