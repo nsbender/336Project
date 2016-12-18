@@ -102,8 +102,121 @@ app.get('/api/game/:roomName/fold', function(req, res) {
   });
 });
 
+// This route is for checking during a round
+app.get('/api/game/:roomName/check', function(req, res) {
+  db.collection("games").findOne({"roomName" : req.params.roomName}, function(err, result) {
+      if (err) throw err;
+      if (result == null) { res.json({"error" : "Could not find this game."}) }
+      else {
+        // Unthaw the Game class
+        result.__proto__ = Game.prototype;
 
+        // Unthaw all the players in the game class
+        result.unthawPlayers();  // TODO: implement a single .unthaw() that does players and cards
 
+        // // Run the game logic to see if the game is ready to proceed
+        // result.gameLogic();
+
+        // Check to see if the player is authorized using the browser cookie
+        if (result.checkIfAuthorizedUser(req.cookies.uniquePlayerID)) {
+          // Loop through to find the player, and set them to having checked
+          // if they are allowed to do that
+          result.players.forEach(function(player) {
+            if (player.browserID == req.cookies.uniquePlayerID &&
+                (player.roundBetAmount == result.currentRoundBettingAmountPerPlayer))
+                {
+                  player.hasHadTurnThisRound = true;
+                }
+          });
+          db.collection("games").update({"roomName" : req.params.roomName}, result);  // Push the game back to the db
+          res.json({"message" : "User checked"});
+        }
+        else {
+          res.json({"error" : "User is not authorized"});
+        }
+      }
+  });
+});
+
+// This route is for calling during a round
+app.get('/api/game/:roomName/call', function(req, res) {
+  db.collection("games").findOne({"roomName" : req.params.roomName}, function(err, result) {
+      if (err) throw err;
+      if (result == null) { res.json({"error" : "Could not find this game."}) }
+      else {
+        // Unthaw the Game class
+        result.__proto__ = Game.prototype;
+
+        // Unthaw all the players in the game class
+        result.unthawPlayers();  // TODO: implement a single .unthaw() that does players and cards
+
+        // // Run the game logic to see if the game is ready to proceed
+        // result.gameLogic();
+
+        // Check to see if the player is authorized using the browser cookie
+        if (result.checkIfAuthorizedUser(req.cookies.uniquePlayerID)) {
+          // Loop through to find the player, and set them to having checked
+          // if they are allowed to do that
+          result.players.forEach(function(player) {
+            if (player.browserID == req.cookies.uniquePlayerID)
+                {
+                  var deltaBet = result.currentRoundBettingAmountPerPlayer - player.roundBetAmount;
+                  if (deltaBet <= player.chips) {
+                    player.hasHadTurnThisRound = true;
+                    player.roundBetAmount += deltaBet;
+                    player.chips -= deltaBet
+                  }
+                }
+          });
+          db.collection("games").update({"roomName" : req.params.roomName}, result);  // Push the game back to the db
+          res.json({"message" : "User called"});
+        }
+        else {
+          res.json({"error" : "User is not authorized"});
+        }
+      }
+  });
+});
+
+// // This route is for raising the bet during a round
+// app.get('/api/game/:roomName/raise', function(req, res) {
+//   db.collection("games").findOne({"roomName" : req.params.roomName}, function(err, result) {
+//       if (err) throw err;
+//       if (result == null) { res.json({"error" : "Could not find this game."}) }
+//       else {
+//         // Unthaw the Game class
+//         result.__proto__ = Game.prototype;
+//
+//         // Unthaw all the players in the game class
+//         result.unthawPlayers();  // TODO: implement a single .unthaw() that does players and cards
+//
+//         // // Run the game logic to see if the game is ready to proceed
+//         // result.gameLogic();
+//
+//         // Check to see if the player is authorized using the browser cookie
+//         if (result.checkIfAuthorizedUser(req.cookies.uniquePlayerID)) {
+//           // Loop through to find the player, and set them to having checked
+//           // if they are allowed to do that
+//           result.players.forEach(function(player) {
+//             if (player.browserID == req.cookies.uniquePlayerID)
+//                 {
+//                   var deltaBet = result.currentRoundBettingAmountPerPlayer - player.roundBetAmount;
+//                   if (deltaBet <= player.chips) {
+//                     player.hasHadTurnThisRound = true;
+//                     player.roundBetAmount += deltaBet;
+//                     player.chips -= deltaBet
+//                   }
+//                 }
+//           });
+//           db.collection("games").update({"roomName" : req.params.roomName}, result);  // Push the game back to the db
+//           res.json({"message" : "User called"});
+//         }
+//         else {
+//           res.json({"error" : "User is not authorized"});
+//         }
+//       }
+//   });
+// });
 
 
 
