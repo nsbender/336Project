@@ -6,6 +6,8 @@
 var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
+// var cookie = require('cookie');
+var cookieParser = require('cookie-parser')
 var app = express();
 var favicon = require('serve-favicon');
 var MongoClient = require('mongodb').MongoClient
@@ -26,6 +28,7 @@ app.set('port', (process.env.PORT || 3000));
 app.use('/', express.static(APP_PATH));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(cookieParser());
 app.use(favicon(path.join(__dirname,'app','images','favicon.ico')));
 
 // Some HTTP stuff
@@ -48,15 +51,56 @@ app.get('/api/game/:roomName', function(req, res) {
         if (err) throw err;
         if (result == null) { res.json({"error" : "Could not find this game."}) }
         else {
+          // Unthaw the Game class
           result.__proto__ = Game.prototype;
-          result.unthawPlayers();
-          res.json(result.getGameForSyndication());
+
+          // Unthaw all the players in the game class
+          result.unthawPlayers();  // TODO: implement a single .unthaw() that does players and cards
+
+          // Run the game logic to see if the game is ready to proceed
+          //result.gameLogic();
+
+          // Send data if the user is authorized, otherwise send error message
+          if (result.checkIfAuthorizedUser(req.cookies.uniquePlayerID)) {
+            res.json(result.getGameForSyndication(req.cookies.uniquePlayerID));
+          }
+          else {
+            res.json({"error" : "User is not authorized"});
+          }
         }
     });
 });
 
+// This is for folding during a round
+app.get('/api/game/:roomName/fold', function(req, res) {
+  db.collection("games").findOne({"roomName" : req.params.roomName}, function(err, result) {
+      if (err) throw err;
+      if (result == null) { res.json({"error" : "Could not find this game."}) }
+      else {
+        // Unthaw the Game class
+        result.__proto__ = Game.prototype;
 
+        // Unthaw all the players in the game class
+        result.unthawPlayers();  // TODO: implement a single .unthaw() that does players and cards
 
+        // // Run the game logic to see if the game is ready to proceed
+        // result.gameLogic();
+
+        // Check to see if the player is authorized using the browser cookie
+        if (result.checkIfAuthorizedUser(req.cookies.uniquePlayerID)) {
+          // Loop through to find the player, and set them to having folded
+          result.players.forEach(function(player) {
+            if (player.browserID == req.cookies.uniquePlayerID) { player.hasFolded = true; }
+          });
+          db.collection("games").update({"roomName" : req.params.roomName}, result);  // Push the game back to the db
+          res.json({"message" : "User folded"});
+        }
+        else {
+          res.json({"error" : "User is not authorized"});
+        }
+      }
+  });
+});
 
 
 
@@ -110,6 +154,36 @@ app.delete('/api/games/:id', function(req, res) {
             });
         });
 });
+
+
+
+
+
+
+
+// _______        _   _               _____             _
+//|__   __|      | | (_)             |  __ \           | |
+//   | | ___  ___| |_ _ _ __   __ _  | |__) |___  _   _| |_ ___  ___
+//   | |/ _ \/ __| __| | '_ \ / _` | |  _  // _ \| | | | __/ _ \/ __|
+//   | |  __/\__ \ |_| | | | | (_| | | | \ \ (_) | |_| | ||  __/\__ \
+//   |_|\___||___/\__|_|_| |_|\__, | |_|  \_\___/ \__,_|\__\___||___/
+//                             __/ |
+//                            |___/
+
+// set cookie route for testing
+app.get('/api/setcookie/:browserid', function(req, res) {
+  res.cookie("uniquePlayerID", req.params.browserid);  // TODO: figure out how to make this last longer than the session
+  res.send("cookie set");
+});
+
+
+
+
+
+
+
+
+
 
 // Send all routes/methods not specified above to the app root.
 app.use('*', express.static(APP_PATH));

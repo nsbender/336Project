@@ -2,6 +2,8 @@
 
 // Import the player class so we can unthaw players in the game class
 var Player = require("./PlayerClass");
+// Import the card class so we can add cards to the game
+var Card = require("./CardClass");
 
 class Game {
   constructor(roomName) {
@@ -37,7 +39,10 @@ class Game {
 
     // Information about the current round of betting
     this.currentRoundBettingAmountPerPlayer = 0; // The amount that each player must bet to stay in the round
-    this.betHistory = []; // A list of strings to show a betting history
+    this.activePlayer = -1;
+
+    // A log to store messages by other players, eg. how much they bet etc
+    this.messageLog = []; // A list of strings to show a betting history
 
   }
 
@@ -76,8 +81,17 @@ class Game {
     return potSize;
   }
 
+  checkIfAuthorizedUser(uniquePlayerID) {
+    // Check to see if the user is authorized to see the game, or if they need to sign up
+    var authorized = false;
+    this.players.forEach(function (player) {
+      if (player.browserID == uniquePlayerID) { authorized = true; }
+    });
+    return authorized;
+  }
+
   // This is the method that makes an object that can be sent to the player's browserID
-  getGameForSyndication() {
+  getGameForSyndication(uniquePlayerID) {
 
     // Make a var to hold the sanitized players
     var players = [];
@@ -87,15 +101,213 @@ class Game {
       players.push(player.getSanitized());
     })
 
+    // Get the user-who-requested-the-data's private information
+    var userPrivate;
+    this.players.forEach(function (player) {
+      if (player.browserID == uniquePlayerID) { userPrivate = player; }
+    })
+
     // Actually return stuff
     return({
       "players" : players,
-      "deckCards" : this.deckCards.length,
+      "numberofDeckCards" : this.deckCards.length,
       "numberOfDiscardCards" : this.discardCards.length,
       "communityCards" : this.communityCards,
       "potValue" : this.getPotSize(),
-      "roundNumber" : this.roundNumber
+      "roundNumber" : this.roundNumber,
+      "gameState" : this.status,
+      "currentRoundBettingAmountPerPlayer" : this.currentRoundBettingAmountPerPlayer,
+      "activePlayer" : this.activePlayer,
+      "currentRoundMustBetToStayIn" : (this.currentRoundBettingAmountPerPlayer - userPrivate.roundBetAmount),
+      "privateUserData" : userPrivate,
+      "messageLog" : this.messageLog
     });
+  }
+
+  bettingLogic(advanceLocation) {
+    var readyToAdvance = true;
+
+    this.players.forEach(function(player) {
+      if ((player.roundBetAmount != this.currentRoundBettingAmountPerPlayer) && !player.hasFolded) { readyToAdvance = false; }
+      if (!player.hasHadTurnThisRound) { readyToAdvance = false; }
+    });
+
+    if (readyToAdvance) {
+      this.status = advanceLocation;
+      statusChanged = true;
+    }
+    else {
+      // Find out who's turn it is (first person in the array who has not gone yet)
+      for (var i = 0; i < this.players.length; i++) {
+        if (!this.players[i].hasHadTurnThisRound) {
+          this.activePlayer = this.players[i].playerNumber;
+          // It's this person's time to go, so indicate that in the JSON
+          break;  // out of this loop
+        }
+      }
+    }
+  }
+
+  gameLogic() {
+
+    var statusChanged = false;
+
+    switch (this.status) {
+
+      case this.statusTypes.CREATED:
+        var readyToStart = true;
+        this.players.forEach(function(player) {
+          if (!player.readyToPlay) { readyToStart = false; }
+        });
+        if (readyToStart) {
+          this.status = this.statusTypes.READY;
+          statusChanged = true;
+        }
+        //break;
+
+      case this.statusTypes.READY:
+        // Assign each player a public player number greater than 0 (used for when all players must respond)
+        for (var i = 0; i < this.players.length; i++) {
+          this.players[i].playerNumber = i+1;
+        }
+        this.status = this.statusTypes.HOLE;
+        //break;
+
+      case this.statusTypes.HOLE:
+        // Init the game.  Give everyone cards etc
+
+        // Init the deck
+        for (var rank = 1; rank <= 13; rank++) {
+          // For each rank, add a card per suit
+          for (var suit = 1; suit <= 4; suit++) {
+            var card = new Card();
+            card.setRank(rank);
+            card.setSuit(suit);
+            card.string = card.getString();
+            card.shortString = card.getShortString();
+            // console.log(card.getString());
+            this.deckCards.push(card);
+          }
+        }
+
+        // Deal two cards to each player
+        for (var i = 0; i < this.players.length; i++) {
+          for (var j =0; j < 2; j++) {
+            // Get a ranom card from the deck put it into the player's hand
+            var card = this.deckCards[Math.floor(Math.random() * this.deckCards.length)];
+            this.deckCards.splice(this.deckCards.indexOf(card), 1);  // Remove from the deck
+            this.players[i].addCard(card);  // Add to the player's hand
+          }
+        }
+
+        // Set each player's betting vars to the defaults
+        for (var i = 0; i < this.players.length; i++) {
+          this.players[i].hasHadTurnThisRound = false;
+          this.players[i].hasFolded = false;
+          this.players[i].roundBetAmount = 0;
+        }
+
+        // TODO: Ante-up if we add that feature?
+
+        this.status = this.statusTypes.HOLE_BETTING;
+        statusChanged = true;
+        break;
+
+      case this.statusTypes.HOLE_BETTING:
+
+        this.bettingLogic(this.statusTypes.FLOP);
+
+        break;
+
+      case this.statusTypes.FLOP:
+
+        // Put down the first three cards for the flop
+        for (var j =0; j < 3; j++) {
+          // Get a ranom card from the deck and put it into the community pile hand
+          var card = this.deckCards[Math.floor(Math.random() * this.deckCards.length)];
+          this.deckCards.splice(this.deckCards.indexOf(card), 1);  // Remove from the deck
+          this.communityCards.push(card);  // Add to the community pile
+        }
+
+        // Set each player to indicate that they have not had a turn this round yet
+        for (var i = 0; i < this.players.length; i++) {
+          this.players[i].hasHadTurnThisRound = false;
+        }
+
+        this.status = this.statusTypes.FLOP_BETTING;
+        statusChanged = true;
+        break;
+
+      case this.statusTypes.FLOP_BETTING:
+
+        this.bettingLogic(this.statusTypes.TURN);
+
+        break;
+
+      case this.statusTypes.TURN:
+
+        // Put down the fourth card into the community pile
+        // Get a ranom card from the deck and put it into the community pile hand
+        var card = this.deckCards[Math.floor(Math.random() * this.deckCards.length)];
+        this.deckCards.splice(this.deckCards.indexOf(card), 1);  // Remove from the deck
+        this.communityCards.push(card);  // Add to the community pile
+
+        // Set each player to indicate that they have not had a turn this round yet
+        for (var i = 0; i < this.players.length; i++) {
+          this.players[i].hasHadTurnThisRound = false;
+        }
+
+        this.status = this.statusTypes.TURN_BETTING;
+        statusChanged = true;
+        break;
+
+      case this.statusTypes.TURN_BETTING:
+
+        bettingLogic(this.statusTypes.RIVER);
+
+        break;
+
+      case this.statusTypes.RIVER:
+
+        // Put down the fifth card into the community pile
+        // Get a ranom card from the deck and put it into the community pile hand
+        var card = this.deckCards[Math.floor(Math.random() * this.deckCards.length)];
+        this.deckCards.splice(this.deckCards.indexOf(card), 1);  // Remove from the deck
+        this.communityCards.push(card);  // Add to the community pile
+
+        // Set each player to indicate that they have not had a turn this round yet
+        for (var i = 0; i < this.players.length; i++) {
+          this.players[i].hasHadTurnThisRound = false;
+        }
+
+        this.status = this.statusTypes.RIVER_BETTING;
+        statusChanged = true;
+        break;
+
+      case this.statusTypes.RIVER_BETTING:
+
+        bettingLogic(this.statusTypes.HAND_COMPLETE);
+
+        break;
+
+      default:
+        // Uh, crap
+        break;
+
+    }
+
+    // CREATED: 0,         // This is the state of the game when players are joining and stuff
+    // READY: 1,           // This is the state of the game after all players have marked it as ready, but before play has started
+    // HOLE: 2,            // This is when the first two cards are dealt to each player
+    // HOLE_BETTING: 3,    // This is the round of betting after the first two cards are dealt
+    // FLOP: 4,            // This is when three cards are shown on the table
+    // FLOP_BETTING: 5,    // Betting again after the first three cards on the table
+    // TURN: 6,            // The fourth shared card is dealt onto the table
+    // TURN_BETTING: 7,    // More betting after the fourth card is put onto the table
+    // RIVER: 8,           // The fifth shared card is dealt onto the table
+    // RIVER_BETTING: 9,   // The final round of betting
+    // HAND_COMPLETE: 10,  // When everyone's bets are in, and the winning hand is calculated
+    // GAME_OVER: 11
   }
 }
 module.exports = Game;

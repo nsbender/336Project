@@ -129,6 +129,7 @@ class Card {
     return output;
   }
 }
+module.exports = Card;
 
 // var cardTest = new Card();
 // cardTest.setSuit(cardTest.cardSuits.HEARTS);
