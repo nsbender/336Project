@@ -1,22 +1,63 @@
-html {
-  height: 90%;
+html, body {
+  height: 100%;
+  margin: 0;
 }
 
 body {
-  min-height: 100%;
+  /*min-height: 100%;*/
   background-image: url(../images/felt.jpg);
   background-repeat: repeat;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 15px;
   line-height: 1.7;
-  margin: 30px;
   padding: 0;
 }
 
 #content {
-  flex: 1;
-  flex-direction: column;
+  height: 100% !important;
 }
+
+#content > div {
+  /*background-color: #BBC !important;*/
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+}
+
+
+.OtherPlayersBox {
+  background-color: blue;
+  flex: 3;
+}
+.OtherPlayersList {
+  display: flex !important;
+  flex-direction: row !important;
+}
+.OtherPlayerNode {
+ flex: 1;
+}
+.smallCardImage {
+  max-height: 60px;
+}
+.largeCardImage {
+  max-height: 150px;
+}
+.TableBox {
+  background-color: green;
+  flex: 3;
+}
+.CommandStripBox {
+  background-color: red;
+  flex: 1;
+}
+.PlayerInfoBox {
+  background-color: purple;
+  flex: 3;
+}
+
+
+
+
 
 a {
   color: #4183c4;
@@ -102,11 +143,4 @@ input[type=text] {
   text-transform: uppercase;
   display: inline-block;
   font-size: 30px;
-}
-
-.gameBox {
-
-}
-
-.otherPlayers {
 }

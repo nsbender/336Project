@@ -185,6 +185,7 @@ class Game {
             card.setSuit(suit);
             card.string = card.getString();
             card.shortString = card.getShortString();
+            card.Filename = card.getFilename();
             // console.log(card.getString());
             this.deckCards.push(card);
           }

@@ -58,7 +58,7 @@ app.get('/api/game/:roomName', function(req, res) {
           result.unthawPlayers();  // TODO: implement a single .unthaw() that does players and cards
 
           // Run the game logic to see if the game is ready to proceed
-          //result.gameLogic();
+          result.gameLogic();
 
           // Send data if the user is authorized, otherwise send error message
           if (result.checkIfAuthorizedUser(req.cookies.uniquePlayerID)) {

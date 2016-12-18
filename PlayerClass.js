@@ -55,7 +55,8 @@ class Player {
       "roundStatus" : this.roundStatus,
       "hasHadTurn" : this.hasHadTurnThisRound,
       "hasFolded" : this.hasFolded,
-      "playerHand" : this.hasFolded ? this.getHand() : []
+      // "playerHand" : this.hasFolded ? this.getHand() : []
+      "playerHand" : this.getHand()
     });
   }
 }

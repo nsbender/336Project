@@ -128,6 +128,53 @@ class Card {
 
     return output;
   }
+
+  // Get the filename of this card's images
+  getFilename() {
+    var output = "";
+
+    // Figure out the suit
+    switch(this.cardSuit) {
+      case this.cardSuits.CLUBS:
+        output += "_of_clubs";
+        break;
+      case this.cardSuits.DIAMONDS:
+        output += "_of_diamonds";
+        break;
+      case this.cardSuits.HEARTS:
+        output += "_of_hearts";
+        break;
+      case this.cardSuits.SPADES:
+        output += "_of_spades";
+        break;
+      default:
+        output = "Undefined Card"
+        break;
+    }
+
+    output += ".png";
+
+    // Get the rank of the card
+    switch(this.cardRank) {
+      case this.cardRanks.ACE:
+        output = "ace" + output;
+        break;
+      case this.cardRanks.KING:
+        output = "king" + output;
+        break;
+      case this.cardRanks.QUEEN:
+        output = "queen" + output;
+        break;
+      case this.cardRanks.JACK:
+        output = "jack" + output;
+        break;
+      default:
+        output = this.cardRank + output;
+        break;
+    }
+
+    return output;
+  }
 }
 module.exports = Card;
 

@@ -12,7 +12,7 @@ module.exports = {
     module: {
         loaders: [
             { test: /\.jsx?$/, exclude: /node_modules/, loader: "babel-loader" },
-            { test: /\.css$/,  loader: 'style!css?modules!postcss' },
+            { test: /\.css$/,  loader: 'style!css?' },
             { test: /\.jpe?g$|\.gif$|\.png$/i,  loader: 'file-loader' }
         ]
     },
