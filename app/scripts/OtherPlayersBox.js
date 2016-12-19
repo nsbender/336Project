@@ -10,7 +10,7 @@ module.exports = React.createClass({
     try {
       var playerNodes = this.props.data.players.map(function(player) {
         return (
-          <OtherPlayer name={player.name} readyToPlay={player.readyToPlay} chips={player.chips} hasHadTurn={player.hasHadTurn} hasFolded={player.hasFolded} playerHand={player.playerHand} />
+          <OtherPlayer className="activePlayerNode" name={player.name} readyToPlay={player.readyToPlay} chips={player.chips} hasHadTurn={player.hasHadTurn} hasFolded={player.hasFolded} playerHand={player.playerHand} />
         );
       });
       return (
