@@ -71,6 +71,44 @@ app.get('/api/game/:roomName', function(req, res) {
     });
 });
 
+// Get game info needed to draw the main UI page
+app.get('/api/game_debug/:roomName', function(req, res) {
+    // res.send(req.params.id);
+    db.collection("games").findOne({"roomName" : req.params.roomName}, function(err, result) {
+        if (err) throw err;
+        if (result == null) { res.json({"error" : "Could not find this game."}) }
+        else {
+          // Unthaw the Game class
+          result.__proto__ = Game.prototype;
+
+          // Unthaw all the players in the game class
+          result.unthawPlayers();  // TODO: implement a single .unthaw() that does players and cards
+
+          // Run the game logic to see if the game is ready to proceed
+          result.gameLogic();
+
+          // Send data if the user is authorized, otherwise send error message
+          if (result.checkIfAuthorizedUser(req.cookies.uniquePlayerID)) {
+            res.json(result);
+          }
+          else {
+            res.json({"error" : "User is not authorized"});
+          }
+        }
+    });
+});
+
+
+
+
+
+
+
+
+
+
+
+
 // This is for folding during a round
 app.get('/api/game/:roomName/fold', function(req, res) {
   db.collection("games").findOne({"roomName" : req.params.roomName}, function(err, result) {

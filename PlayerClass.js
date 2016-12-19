@@ -63,22 +63,22 @@ class Player {
 
   hasRoyalFlush(communityCards) {
 
-    // Returns true if the player has a royal flush
-
-    var cards = this.cards.concat(communityCards);
-
-    var
-    for (var i = 0; i < cards.length; i++) {
-      if (
-        cards[i].cardRank == 1 ||
-        cards[i].cardRank == 13 ||
-        cards[i].cardRank == 12 ||
-        cards[i].cardRank == 11 ||
-        cards[i].cardRank == 10
-      ) {
-
-      }
-    }
+    // // Returns true if the player has a royal flush
+    //
+    // var cards = this.cards.concat(communityCards);
+    //
+    // var
+    // for (var i = 0; i < cards.length; i++) {
+    //   if (
+    //     cards[i].cardRank == 1 ||
+    //     cards[i].cardRank == 13 ||
+    //     cards[i].cardRank == 12 ||
+    //     cards[i].cardRank == 11 ||
+    //     cards[i].cardRank == 10
+    //   ) {
+    //
+    //   }
+    // }
 
 
   }
