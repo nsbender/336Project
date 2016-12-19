@@ -163,7 +163,7 @@ class Game {
           this.status = this.statusTypes.READY;
           statusChanged = true;
         }
-        //break;
+        break;
 
       case this.statusTypes.READY:
         // Assign each player a public player number greater than 0 (used for when all players must respond)
@@ -171,7 +171,7 @@ class Game {
           this.players[i].playerNumber = i+1;
         }
         this.status = this.statusTypes.HOLE;
-        //break;
+        break;
 
       case this.statusTypes.HOLE:
         // Init the game.  Give everyone cards etc
@@ -288,6 +288,27 @@ class Game {
       case this.statusTypes.RIVER_BETTING:
 
         bettingLogic(this.statusTypes.HAND_COMPLETE);
+
+        break;
+
+      case this.statusTypes.HAND_COMPLETE:
+
+        // For each player, calculate who has the highest ranking hand
+        var playerRankings = [];
+
+
+        for (var i = 0; i < this.players.length; i++) {
+
+          
+
+
+        }
+
+        break;
+
+      case this.statusTypes.GAME_OVER:
+
+        // Game over logic
 
         break;
 
