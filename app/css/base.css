@@ -46,11 +46,17 @@ body {
   text-align: center;
 }
 
+.TableBox > img {
+  max-height: 150px;
+}
+
 .CommandStripBox {
   background-image: url(../images/wood.jpg);
   background-repeat: repeat;
-  background-color: red;
   flex: 1;
+  flex-direction: row;
+  text-align: center;
+
   border-top: 2px;
   border-bottom: 0px;
   border-left: 0px;
@@ -58,9 +64,28 @@ body {
   border-style: solid;
   border-color: #ffbd26;
 }
+
+.CommandStripBox > button {
+  background-color: #97252B;
+  border: 2px solid #F3CD00;
+  color: white;
+  padding: 15px 32px;
+  margin: 15px 20px 15px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
 .PlayerInfoBox {
   flex: 3;
+  text-align: center;
 }
+
+.PlayerInfoBox > img {
+  max-height: 150px;
+}
+
 .smallCardImage {
   padding: 2px;
 }
@@ -91,7 +116,7 @@ h1, h2, h3, h4 {
 }
 
 h1 {
-  border-bottom: 1px solid #ddd;
+  border-top: 2px solid #ffbd26;
   font-size: 2.5em;
 }
 

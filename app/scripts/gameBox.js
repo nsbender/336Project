@@ -36,8 +36,8 @@ module.exports = React.createClass({
       <div>
         <OtherPlayersBox data={this.state.data} />
         <TableBox data={this.state.data} />
-        <PlayerInfoBox />
-        <CommandStripBox />
+        <PlayerInfoBox data={this.state.data} />
+        <CommandStripBox data={this.state.data}/>
       </div>
     );
   }
