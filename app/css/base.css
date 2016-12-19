@@ -43,11 +43,15 @@ body {
 }
 .TableBox {
   flex: 3;
+  padding-top: 20px;
   text-align: center;
 }
 
 .TableBox > img {
   max-height: 150px;
+}
+.TableBox > h1 {
+  color: #ffbd26;
 }
 
 .CommandStripBox {
@@ -77,9 +81,33 @@ body {
   font-size: 16px;
 }
 
-.PlayerInfoBox {
+.PlayerAndLog {
   flex: 3;
+  display: flex!important;
+  flex-direction: row!important;
+}
+
+.PlayerInfoBox {
+  flex: 4;
   text-align: center;
+}
+
+.GameLog {
+  flex: 1;
+  padding: 10px;
+  background-image: url(../images/felt.jpg);
+  border-top: 2px;
+  border-bottom: 0px;
+  border-left: 2px;
+  border-right: 0px;
+  border-style: solid;
+  border-color: #ffbd26;
+}
+.GameLog > h1 {
+  color: #ffbd26;
+}
+.GameLog > p {
+  color: #ffbd26;
 }
 
 .PlayerInfoBox > img {
@@ -111,6 +139,8 @@ code {
 
 h1, h2, h3, h4 {
   font-weight: bold;
+  margin: 0 !important;
+  border: 0 !important;
 }
 
 h1 {
@@ -144,7 +174,6 @@ h4 {
 }
 
 p, ul {
-  margin: 15px 0;
 }
 
 ul {

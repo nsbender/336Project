@@ -2,6 +2,7 @@ import React from 'react';
 import $ from 'jquery';
 
 import Card from './Card.js'
+import GameLog from './GameLog.js'
 
 module.exports = React.createClass({
   render: function() {
@@ -14,9 +15,9 @@ module.exports = React.createClass({
       });
       return (
         <div className="PlayerInfoBox">
-        <h1>You</h1>
-        <h2>{this.props.data.privateUserData.chips} Chips</h2>
-        {playerCards}
+          <h1>You</h1>
+          <h2>{this.props.data.privateUserData.chips} Chips</h2>
+          {playerCards}
         </div>
       );
     }

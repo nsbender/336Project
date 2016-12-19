@@ -16,7 +16,9 @@ module.exports = React.createClass({
       });
       return (
         <div className="TableBox">
+          <Card className="largeCardImage" filename="face_down.png" description="The Deck"/>
           {communityCards}
+          <h1>Current Jackpot: {this.props.data.potValue}</h1>
         </div>
       );
     }
