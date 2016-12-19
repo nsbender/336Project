@@ -24,9 +24,7 @@ body {
   height: 100% !important;
 }
 
-
 .OtherPlayersBox {
-  background-color: blue;
   flex: 3;
 }
 .OtherPlayersList {
@@ -35,6 +33,7 @@ body {
 }
 .OtherPlayerNode {
  flex: 1;
+ text-align: center;
 }
 .smallCardImage {
   max-height: 60px;
@@ -43,21 +42,28 @@ body {
   max-height: 150px;
 }
 .TableBox {
-  background-color: green;
   flex: 3;
+  text-align: center;
 }
+
 .CommandStripBox {
+  background-image: url(../images/wood.jpg);
+  background-repeat: repeat;
   background-color: red;
   flex: 1;
+  border-top: 2px;
+  border-bottom: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  border-style: solid;
+  border-color: #ffbd26;
 }
 .PlayerInfoBox {
-  background-color: purple;
   flex: 3;
 }
-
-
-
-
+.smallCardImage {
+  padding: 2px;
+}
 
 a {
   color: #4183c4;
