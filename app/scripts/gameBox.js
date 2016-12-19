@@ -6,6 +6,7 @@ import OtherPlayersBox from './OtherPlayersBox.js'
 import TableBox from './TableBox.js'
 import CommandStripBox from './CommandStripBox.js'
 import PlayerInfoBox from './PlayerInfoBox.js'
+import GameLog from './GameLog.js'
 
 import '../css/base.css';
 
@@ -20,6 +21,7 @@ module.exports = React.createClass({
       cache: false,
     })
     .done(function(result){
+      result.gameID = this.props.params.id;
       this.setState({data: result});
     }.bind(this))
     .fail(function(xhr, status, errorThrown) {
@@ -35,9 +37,12 @@ module.exports = React.createClass({
     return (
       <div>
         <OtherPlayersBox data={this.state.data} />
-        <TableBox />
-        <CommandStripBox />
-        <PlayerInfoBox />
+        <TableBox data={this.state.data} />
+        <div className="PlayerAndLog">
+        <PlayerInfoBox data={this.state.data} />
+        <GameLog data={this.state.data} />
+        </div>
+        <CommandStripBox data={this.state.data}/>
       </div>
     );
   }

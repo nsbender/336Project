@@ -24,9 +24,7 @@ body {
   height: 100% !important;
 }
 
-
 .OtherPlayersBox {
-  background-color: blue;
   flex: 3;
 }
 .OtherPlayersList {
@@ -35,6 +33,7 @@ body {
 }
 .OtherPlayerNode {
  flex: 1;
+ text-align: center;
 }
 .smallCardImage {
   max-height: 60px;
@@ -43,21 +42,81 @@ body {
   max-height: 150px;
 }
 .TableBox {
-  background-color: green;
   flex: 3;
+  padding-top: 20px;
+  text-align: center;
 }
+
+.TableBox > img {
+  max-height: 150px;
+}
+.TableBox > h1 {
+  color: #ffbd26;
+}
+
 .CommandStripBox {
-  background-color: red;
+  background-image: url(../images/wood.jpg);
+  background-repeat: repeat;
   flex: 1;
+  flex-direction: row;
+  text-align: center;
+
+  border-top: 2px;
+  border-bottom: 0px;
+  border-left: 0px;
+  border-right: 0px;
+  border-style: solid;
+  border-color: #ffbd26;
 }
-.PlayerInfoBox {
-  background-color: purple;
+
+.CommandStripBox > button {
+  background-color: #97252B;
+  border: 2px solid #F3CD00;
+  color: white;
+  padding: 15px 32px;
+  margin: 15px 20px 15px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+.PlayerAndLog {
   flex: 3;
+  display: flex!important;
+  flex-direction: row!important;
 }
 
+.PlayerInfoBox {
+  flex: 4;
+  text-align: center;
+}
 
+.GameLog {
+  flex: 1;
+  padding: 10px;
+  background-image: url(../images/felt.jpg);
+  border-top: 2px;
+  border-bottom: 0px;
+  border-left: 2px;
+  border-right: 0px;
+  border-style: solid;
+  border-color: #ffbd26;
+}
+.GameLog > h1 {
+  color: #ffbd26;
+}
+.GameLog > p {
+  color: #ffbd26;
+}
 
+.PlayerInfoBox > img {
+  max-height: 150px;
+}
 
+.smallCardImage {
+  padding: 2px;
+}
 
 a {
   color: #4183c4;
@@ -80,12 +139,12 @@ code {
 
 h1, h2, h3, h4 {
   font-weight: bold;
-  margin: 0 0 15px;
-  padding: 0;
+  margin: 0 !important;
+  border: 0 !important;
 }
 
 h1 {
-  border-bottom: 1px solid #ddd;
+  border-top: 2px solid #ffbd26;
   font-size: 2.5em;
 }
 
@@ -115,7 +174,6 @@ h4 {
 }
 
 p, ul {
-  margin: 15px 0;
 }
 
 ul {

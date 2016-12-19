@@ -7,7 +7,8 @@ module.exports = React.createClass({
   render: function() {
     var playerCards = this.props.playerHand.map(function(card) {
       return (
-        <Card filename={card.Filename} description={card.string}/>
+        //<Card filename={card.Filename} description={card.string}/>
+        <Card filename={"face_down.png"} description={card.string}/>
       );
     });
     return (
