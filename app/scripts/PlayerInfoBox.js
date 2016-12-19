@@ -15,6 +15,7 @@ module.exports = React.createClass({
       return (
         <div className="PlayerInfoBox">
         <h1>You</h1>
+        <h2>{this.props.data.privateUserData.chips} Chips</h2>
         {playerCards}
         </div>
       );

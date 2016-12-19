@@ -10,7 +10,7 @@ module.exports = React.createClass({
 
   check: function() {
     $.ajax({
-      url: API_URL + "/" + this.props.params.id + "/check",
+      url: API_URL + "/" + this.props.gameID + "/check",
       type: 'GET'
     })
     .done(function(){
@@ -23,7 +23,7 @@ module.exports = React.createClass({
 
   callBet: function() {
     $.ajax({
-      url: API_URL + "/" + this.props.params.id + "/call",
+      url: API_URL + "/" + this.props.gameID + "/call",
       type: 'GET'
     })
     .done(function(){
@@ -36,7 +36,7 @@ module.exports = React.createClass({
 
   raiseBet: function() {
     $.ajax({
-      url: API_URL + "/" + this.props.params.id + "/raise",
+      url: API_URL + "/" + this.props.gameID + "/raise",
       type: 'GET'
     })
     .done(function(){
@@ -49,7 +49,7 @@ module.exports = React.createClass({
 
   fold: function() {
     $.ajax({
-      url: API_URL + "/" + this.props.params.id + "/fold",
+      url: API_URL + "/" + this.props.gameID + "/fold",
       type: 'GET'
     })
     .done(function(){
