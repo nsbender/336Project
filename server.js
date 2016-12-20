@@ -382,7 +382,7 @@ app.get('/api/setcookie/:browserid', function(req, res) {
 // Send all routes/methods not specified above to the app root.
 app.use('*', express.static(APP_PATH));
 
-app.listen(app.get('port'), function() {
+app.listen(3002, function() {
     console.log('Server started: http://localhost:' + app.get('port') + '/');
 });
 
