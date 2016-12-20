@@ -5,6 +5,9 @@ var Player = require("./PlayerClass");
 // Import the card class so we can add cards to the game
 var Card = require("./CardClass");
 
+// Poker hand solver library
+var Hand = require('pokersolver').Hand;
+
 class Game {
   constructor(roomName) {
     this.roomName = roomName;
@@ -109,6 +112,7 @@ class Game {
 
     // Actually return stuff
     return({
+      "roomName" : this.roomName,
       "players" : players,
       "numberofDeckCards" : this.deckCards.length,
       "numberOfDiscardCards" : this.discardCards.length,
@@ -126,20 +130,29 @@ class Game {
 
   bettingLogic(advanceLocation) {
     var readyToAdvance = true;
+    var numberOfNonFoldedPlayers = 0;
 
-    this.players.forEach(function(player) {
-      if ((player.roundBetAmount != this.currentRoundBettingAmountPerPlayer) && !player.hasFolded) { readyToAdvance = false; }
-      if (!player.hasHadTurnThisRound) { readyToAdvance = false; }
-    });
+    // Check if all the betting has been completed
+    for (var i = 0; i < this.players.length; i++) {
+      if ((this.players[i].roundBetAmount != this.currentRoundBettingAmountPerPlayer) && !this.players[i].hasFolded) { readyToAdvance = false; }
+      if (!this.players[i].hasHadTurnThisRound) { readyToAdvance = false; }
+      if (!this.players[i].hasFolded) { numberOfNonFoldedPlayers += 1; }
+    }
+
+    // Check to see if everyone has folded
+    if (numberOfNonFoldedPlayers == 1) {
+      this.status = this.statusTypes.HAND_COMPLETE;
+    }
 
     if (readyToAdvance) {
       this.status = advanceLocation;
-      statusChanged = true;
+      // statusChanged = true;
     }
     else {
       // Find out who's turn it is (first person in the array who has not gone yet)
       for (var i = 0; i < this.players.length; i++) {
-        if (!this.players[i].hasHadTurnThisRound) {
+        // console.log("stuff");
+        if (!this.players[i].hasHadTurnThisRound && !this.players[i].hasFolded) {
           this.activePlayer = this.players[i].playerNumber;
           // It's this person's time to go, so indicate that in the JSON
           break;  // out of this loop
@@ -149,6 +162,11 @@ class Game {
   }
 
   gameLogic() {
+
+    // Trim the message log
+    while(this.messageLog.length > 10) {
+      this.messageLog.shift();
+    }
 
     var statusChanged = false;
 
@@ -176,6 +194,19 @@ class Game {
       case this.statusTypes.HOLE:
         // Init the game.  Give everyone cards etc
 
+        // Set each player's betting vars to the defaults
+        for (var i = 0; i < this.players.length; i++) {
+          this.players[i].hasHadTurnThisRound = false;
+          this.players[i].hasFolded = false;
+          this.players[i].roundBetAmount = 0;
+          this.players[i].cards = [];
+        }
+
+        // Reset the current round game vars
+        this.currentRoundBettingAmountPerPlayer = 0;
+        this.deckCards = [];
+        this.communityCards = [];
+
         // Init the deck
         for (var rank = 1; rank <= 13; rank++) {
           // For each rank, add a card per suit
@@ -201,12 +232,6 @@ class Game {
           }
         }
 
-        // Set each player's betting vars to the defaults
-        for (var i = 0; i < this.players.length; i++) {
-          this.players[i].hasHadTurnThisRound = false;
-          this.players[i].hasFolded = false;
-          this.players[i].roundBetAmount = 0;
-        }
 
         // TODO: Ante-up if we add that feature?
 
@@ -264,7 +289,7 @@ class Game {
 
       case this.statusTypes.TURN_BETTING:
 
-        bettingLogic(this.statusTypes.RIVER);
+        this.bettingLogic(this.statusTypes.RIVER);
 
         break;
 
@@ -287,28 +312,80 @@ class Game {
 
       case this.statusTypes.RIVER_BETTING:
 
-        bettingLogic(this.statusTypes.HAND_COMPLETE);
+        this.bettingLogic(this.statusTypes.HAND_COMPLETE);
 
         break;
 
       case this.statusTypes.HAND_COMPLETE:
 
-        // For each player, calculate who has the highest ranking hand
-        var playerRankings = [];
+        // Check to see if someone won by folding
+        var numberOfNonFoldedPlayers = 0;
 
-
+        // Check if any players have folded
         for (var i = 0; i < this.players.length; i++) {
-
-          
-
-
+          if (!this.players[i].hasFolded) { numberOfNonFoldedPlayers += 1; }
         }
+
+        // Check to see if everyone has folded
+        if (numberOfNonFoldedPlayers == 1) {
+          // The non-folding player won by default
+          // Find which player has the winning hand
+          for (var i = 0; i < this.players.length; i++) {
+            if (!this.players[i].hasFolded) {
+              //console.log(this.players[i].name);
+              winningPlayerNumber = this.players[i].playerNumber;
+
+              // Give that player all the cash from the Jackpot
+              this.players[i].chips += this.getPotSize();
+
+              // Push a message to the server
+              this.messageLog.push(this.players[i].name + " won that round because everyone else folded!");
+            }
+          }
+        }
+        else {
+          // Create a Hand object for each player, based on their cards
+          var playerHands = [];
+
+          // Add each player's hand
+          for (var i = 0; i < this.players.length; i++) {
+
+            var hand = Hand.solve(this.players[i].getArrayOfShortStringCards());
+            // console.log(hand);
+            this.players[i].handSolverObject = hand;
+            playerHands.push(hand);
+
+          }
+
+          // Calculate the winning hand
+          var winner = Hand.winners(playerHands);
+          var winningPlayerNumber = -1;
+
+          // console.log(winner);
+
+          // Find which player has the winning hand
+          for (var i = 0; i < this.players.length; i++) {
+            if (this.players[i].handSolverObject == winner[0]) {
+              console.log(this.players[i].name);
+              winningPlayerNumber = this.players[i].playerNumber;
+
+              // Give that player all the cash from the Jackpot
+              this.players[i].chips += this.getPotSize();
+
+              this.messageLog.push(this.players[i].name + " won that round with a " + winner[0].descr + "!");
+            }
+          }
+        }
+
+
+        this.status = this.statusTypes.HOLE;
+        statusChanged = true;
 
         break;
 
       case this.statusTypes.GAME_OVER:
 
-        // Game over logic
+        this.message = "This game is over."
 
         break;
 

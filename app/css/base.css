@@ -49,7 +49,7 @@ body {
   /*box-shadow: inset 0 0 20px 0px #ffbd26;*/
   /*border: 2px solid #ffbd26;*/
   border: 0px;
-  border-bottom: 2px solid #ffbd26;
+  border-bottom: 5px solid #ffbd26;
   /*background-color: rgba(255, 189, 38, 0.1);*/
 }
 
@@ -59,17 +59,29 @@ body {
 .largeCardImage {
   max-height: 100px;
 }
+
+
 .TableBox {
   flex: 3;
   padding-top: 20px;
   text-align: center;
 }
-
 .TableBox > img {
   max-height: 150px;
 }
 .TableBox > h1 {
   color: #ffbd26;
+}
+.gameStateExplanation {
+  display: inline-block;
+  background-color: #ffffcc;
+  border: 2px solid #ffbd26;
+}
+.gameStateExplanation > h3 {
+  background-color: #ffbd26;
+}
+.gameStateExplanation > p {
+  margin: 10px;
 }
 
 .CommandStripBox {
@@ -77,6 +89,9 @@ body {
   background-repeat: repeat;
   flex: 1;
   flex-direction: row;
+
+  max-height: 80px;
+
   text-align: center;
 
   border-top: 2px;
@@ -98,6 +113,10 @@ body {
   display: inline-block;
   font-size: 16px;
 }
+.CommandStripBox > h1 {
+  line-height: 80px;
+  color: #ffbd26;
+}
 
 .PlayerAndLog {
   flex: 3;
@@ -108,6 +127,7 @@ body {
 .PlayerInfoBox {
   flex: 4;
   text-align: center;
+  color: #ffbd26;
 }
 
 .GameLog {

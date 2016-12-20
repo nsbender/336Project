@@ -4,7 +4,6 @@ import $ from 'jquery';
 module.exports = React.createClass({
   render: function() {
     try {
-      this.props.data.messageLog = ["This is a test", "Testing 1234", "Keith folds"];
       var messages = this.props.data.messageLog.map(function(message) {
         return (
           <li>{message}</li>
