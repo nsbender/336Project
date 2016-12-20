@@ -48,40 +48,80 @@ class Player {
   // This method sends a sanitized version of the game that other players can see
   getSanitized() {
     return({
-      "playerNumder" : this.playerNumber,
+      "playerNumber" : this.playerNumber,
       "name" : this.name,
       "readyToPlay" : this.readyToPlay,
       "chips" : this.chips,
       "roundStatus" : this.roundStatus,
       "hasHadTurn" : this.hasHadTurnThisRound,
       "hasFolded" : this.hasFolded,
-      // "playerHand" : this.hasFolded ? this.getHand() : []
-      "playerHand" : this.getHand()
+      "playerHand" : this.hasFolded ? this.getHand() : []
+      // "playerHand" : this.getHand()
     });
   }
 
 
-  hasRoyalFlush(communityCards) {
+  getArrayOfShortStringCards() {
+    var retarr = [];
+    this.cards.forEach(function(card) {
+      retarr.push(card.getShortString());
+    });
 
-    // Returns true if the player has a royal flush
-
-    var cards = this.cards.concat(communityCards);
-
-    var
-    for (var i = 0; i < cards.length; i++) {
-      if (
-        cards[i].cardRank == 1 ||
-        cards[i].cardRank == 13 ||
-        cards[i].cardRank == 12 ||
-        cards[i].cardRank == 11 ||
-        cards[i].cardRank == 10
-      ) {
-
-      }
-    }
-
-
+    return retarr;
   }
+
+
+  // hasRoyalFlush(communityCards) {
+  //
+  //   // Returns true if the player has a royal flush
+  //
+  //   var cards = this.cards.concat(communityCards);
+  //
+  //   // Arrays to hold cards from each suit
+  //   var spades, hearts, diamonds, clubs = [];
+  //
+  //   // Split the cards up by rank
+  //   for (var i = 0; i < cards.length; i++) {
+  //     if (cards[i].cardSuit == cards[i].cardSuits.SPADES) { spades.push(cards.splice(i, 1)); }
+  //     if (cards[i].cardSuit == cards[i].cardSuits.HEARTS) { hearts.push(cards.splice(i, 1)); }
+  //     if (cards[i].cardSuit == cards[i].cardSuits.DIAMONDS) { diamonds.push(cards.splice(i, 1)); }
+  //     if (cards[i].cardSuit == cards[i].cardSuits.CLUBS) { clubs.push(cards.splice(i, 1)); }
+  //   }
+  //
+  //   // A function to check for each rank in each suit
+  //   var checkForEachRank = function(cards) {
+  //     var king, queen, jack, ace, ten = null;
+  //     for (var i = 0; i < cards.length; i++) {
+  //       if (cards[i].cardRank == 13) { king = cards.splice(i, 1); }
+  //       if (cards[i].cardRank == 12) { queen = cards.splice(i, 1); }
+  //       if (cards[i].cardRank == 11) { jack = cards.splice(i, 1); }
+  //       if (cards[i].cardRank == 1) { ace = cards.splice(i, 1); }
+  //       if (cards[i].cardRank == 10) { ten = cards.splice(i, 1); }
+  //     }
+  //     if (
+  //       king != null &&
+  //       queen != null &&
+  //       jack != null &&
+  //       ace != null &&
+  //       ten != null
+  //     ) { return true; }
+  //     return false;
+  //   }
+  //
+  //   if (checkForEachRank(spades) || checkForEachRank(hearts) || checkForEachRank(diamonds) || checkForEachRank(clubs)) {
+  //     return true;  // this is a royal flush
+  //   }
+  //
+  //   return false; // this is not a royal flush
+  // }
+  //
+  //
+  // hasStraightFlush(communityCards) {
+  //
+  //
+  //
+  //
+  // }
 
 
 
