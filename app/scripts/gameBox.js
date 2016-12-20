@@ -21,6 +21,7 @@ module.exports = React.createClass({
       cache: false,
     })
     .done(function(result){
+      
       result.gameID = this.props.params.id;
       this.setState({data: result});
     }.bind(this))
