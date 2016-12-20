@@ -4,15 +4,20 @@ import $ from 'jquery';
 module.exports = React.createClass({
   render: function() {
     try {
+      this.props.data.messageLog = ["This is a test", "Testing 1234", "Keith folds"];
       var messages = this.props.data.messageLog.map(function(message) {
         return (
-          <p>{message.message}</p>
+          <li>{message}</li>
         );
       });
       return (
         <div className="GameLog">
           <h1>Game Events</h1>
-          {messages}
+          <div className="contents">
+            <ul>
+              {messages}
+            </ul>
+          </div>
         </div>
       );
     }

@@ -5,17 +5,29 @@ import Card from './Card.js'
 
 module.exports = React.createClass({
   render: function() {
-    var playerCards = this.props.playerHand.map(function(card) {
-      return (
-        //<Card filename={card.Filename} description={card.string}/>
-        <Card filename={"face_down.png"} description={card.string}/>
-      );
-    });
+    if (this.props.playerHand.length > 10) {
+      // Show the hand of the player
+      var playerCards = this.props.playerHand.map(function(card) {
+        return (
+          <Card filename={card.Filename} description={card.string}/>
+        );
+      });
+    }
+    else {
+      // Show two face-down cards
+      var playerCards = ["card1", "card2"].map(function(card) {
+        return (
+          <Card filename="face_down.png" description="Face down playing card"/>
+        );
+      });
+    }
+
     return (
       <div className="OtherPlayerNode">
         <h3>{this.props.name}</h3>
-        <p>Chips: {this.props.chips}</p>
         {playerCards}
+        <br/>
+        Chips: {this.props.chips}
       </div>
     );
   }

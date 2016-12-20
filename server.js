@@ -60,6 +60,97 @@ app.get('/api/game/:roomName', function(req, res) {
           // Run the game logic to see if the game is ready to proceed
           result.gameLogic();
 
+    //       result.deckCards = [{
+    //   "cardRanks": {
+    //     "UNDEFINED": 0,
+    //     "ACE": 1,
+    //     "TWO": 2,
+    //     "THREE": 3,
+    //     "FOUR": 4,
+    //     "FIVE": 5,
+    //     "SIX": 6,
+    //     "SEVEN": 7,
+    //     "EIGHT": 8,
+    //     "NINE": 9,
+    //     "TEN": 10,
+    //     "JACK": 11,
+    //     "QUEEN": 12,
+    //     "KING": 13
+    //   },
+    //   "cardRank": 13,
+    //   "cardSuits": {
+    //     "UNDEFINED": 0,
+    //     "CLUBS": 1,
+    //     "DIAMONDS": 2,
+    //     "HEARTS": 3,
+    //     "SPADES": 4
+    //   },
+    //   "cardSuit": 4,
+    //   "string": "King of Spades",
+    //   "shortString": "KS",
+    //   "Filename": "king_of_spades.png"
+    // },
+    // {
+    //   "cardRanks": {
+    //     "UNDEFINED": 0,
+    //     "ACE": 1,
+    //     "TWO": 2,
+    //     "THREE": 3,
+    //     "FOUR": 4,
+    //     "FIVE": 5,
+    //     "SIX": 6,
+    //     "SEVEN": 7,
+    //     "EIGHT": 8,
+    //     "NINE": 9,
+    //     "TEN": 10,
+    //     "JACK": 11,
+    //     "QUEEN": 12,
+    //     "KING": 13
+    //   },
+    //   "cardRank": 3,
+    //   "cardSuits": {
+    //     "UNDEFINED": 0,
+    //     "CLUBS": 1,
+    //     "DIAMONDS": 2,
+    //     "HEARTS": 3,
+    //     "SPADES": 4
+    //   },
+    //   "cardSuit": 1,
+    //   "string": "3 of Clubs",
+    //   "shortString": "3C",
+    //   "Filename": "3_of_clubs.png"
+    // },
+    // {
+    //   "cardRanks": {
+    //     "UNDEFINED": 0,
+    //     "ACE": 1,
+    //     "TWO": 2,
+    //     "THREE": 3,
+    //     "FOUR": 4,
+    //     "FIVE": 5,
+    //     "SIX": 6,
+    //     "SEVEN": 7,
+    //     "EIGHT": 8,
+    //     "NINE": 9,
+    //     "TEN": 10,
+    //     "JACK": 11,
+    //     "QUEEN": 12,
+    //     "KING": 13
+    //   },
+    //   "cardRank": 7,
+    //   "cardSuits": {
+    //     "UNDEFINED": 0,
+    //     "CLUBS": 1,
+    //     "DIAMONDS": 2,
+    //     "HEARTS": 3,
+    //     "SPADES": 4
+    //   },
+    //   "cardSuit": 1,
+    //   "string": "7 of Clubs",
+    //   "shortString": "7C",
+    //   "Filename": "7_of_clubs.png"
+    // }];
+
           // Send data if the user is authorized, otherwise send error message
           if (result.checkIfAuthorizedUser(req.cookies.uniquePlayerID)) {
             res.json(result.getGameForSyndication(req.cookies.uniquePlayerID));
