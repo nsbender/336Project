@@ -21,7 +21,7 @@ module.exports = {
 	new webpack.HotModuleReplacementPlugin()
     ],
     devServer: {
-        port: 3001,
+        port: 3003,
         proxy: { '/api/**': 'http://localhost:3002' },
         colors: true,
         historyApiFallback: true,
