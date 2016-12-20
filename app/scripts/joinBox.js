@@ -48,12 +48,12 @@ module.exports = React.createClass({
         <div className="homepageBox">
         Hi Professor!
 
-        I have been at it all night, and I'm happy to say that the gameplay works completely now!  The homepage does not though.<br />
+        I have been at it all night, and I am happy to say that the gameplay works completely now!  The homepage does not though.<br />
         So, to demo it I have set up a sample game with two players.  Best thing to do is use a regular chrome window for one player
         and an incognito window for the second one.<br /><br />
         To set up the game as player 1 (you), go to /api/setcookie/p1 in your browser.  <br />To become player 2, go to /api/setcookie/p2
         <br /><br />To start the game, go to /kvldemo in your browser windows after setting the cookies.<br /><br />
-        Also, for some reason the non-dev server keeps adding trailing slashes to the URLs, which mess up the images.  I haven't been able to figure out a fix other than to use the dev server.
+        Also, for some reason the non-dev server keeps adding trailing slashes to the URLs, which mess up the images.  I have not been able to figure out a fix other than to use the dev server.
         </div>
         <br/><br/><br/><br/><br/><br/>
         <h2>Create a new game, or enter the id of an already existing game in the field below</h2>
