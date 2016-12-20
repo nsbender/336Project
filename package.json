@@ -44,7 +44,7 @@
     "windev": "concurrently \"nodemon --ignore app/ server.js\" \"webpack-dev-server --progress --history-api-fallback\"",
     "stop": "kill $(pgrep node)",
     "install": "webpack --progress --config ./webpack.production.config.js",
-    "start": "kill $(pgrep node) ; nodemon --ignore app/ server.js & webpack-dev-server --progress --history-api-fallback&"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
